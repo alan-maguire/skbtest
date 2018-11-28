@@ -30,7 +30,7 @@ KTF_INIT();
  **/
 TEST(skb, alloc_skb_sizes)
 {
-	unsigned int i, sizes[] = { 127, 260, 320, 550, 1028, 2059 };
+	unsigned int i, sizes[] = { 0, 127, 260, 320, 550, 1028, 2059, 65536  };
 	struct sk_buff *skb = NULL;
 
 	for (i = 0; i < ARRAY_SIZE(sizes); i++) {
@@ -77,6 +77,12 @@ KTF_RETURN_PROBE(kmem_cache_alloc_node, kmem_cache_alloc_nodehandler)
 	return 0;
 }
 
+/**
+ * alloc_skb_nomem()
+ *
+ * Ensure that in the face of allocation failures (kmem cache alloc of the
+ * skb) alloc_skb() behaves sensibly and returns NULL.
+ **/
 TEST(skb, alloc_skb_nomem)
 {
 	struct sk_buff *skb = NULL;
@@ -96,10 +102,34 @@ done:
 	kfree_skb(skb);
 }
 
+/**
+ * alloc_skb_invalid_sizes()
+ *
+ * Verify allocation fails when invalid sizes are used.
+ **/
+TEST(skb, alloc_skb_invalid_sizes)
+{
+	/* We cannot just use UINT_MAX here as the "size" argument passed in
+	 * has sizeof(struct skb_shared_info) etc added to it; let's settle for
+	 * UINT_MAX >> 1, UINT_MAX >> 2, etc.
+	 */
+	unsigned int i, sizes[] = { UINT_MAX >> 1, UINT_MAX >> 2};
+	struct sk_buff *skb = NULL;
+
+	for (i = 0; i < ARRAY_SIZE(sizes); i++) {
+		skb = alloc_skb(sizes[i], GFP_KERNEL);
+
+		ASSERT_ADDR_EQ_GOTO(skb, 0, done);
+	}
+done:
+	kfree_skb(skb);
+}
+
 static void add_tests(void)
 {
 	ADD_TEST(alloc_skb_sizes);
 	ADD_TEST(alloc_skb_nomem);
+	ADD_TEST(alloc_skb_invalid_sizes);
 }
 
 static int __init skbtest_init(void)
