@@ -1,3 +1,14 @@
+/*
+ * Copyright (c) 2009, 2018, Oracle and/or its affiliates. All rights reserved.
+ *    Author: Alan Maguire <alan.maguire@oracle.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2
+ * as published by the Free Software Foundation.
+ *
+ * skbtest.c: Series of tests of the skb data structure/functions which
+ * also demonstrate KTF functionality.
+ */
 
 #include <linux/module.h>
 #include <linux/skbuff.h>
