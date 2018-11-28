@@ -3,7 +3,7 @@
 struct sk_buff * is the core networking abstraction used to represent packets
 as they travel through the networking stack.  Here we demonstrate KTF functionality by writing tests which assert aspects of skb behaviour.  The initial intent of this work is demonstrate how to write tests with KTF; however a longer-term aspiration is to develop a valuable set of unit tests around skb behaviour.
 
-Any contributions or feedback is most welcome!
+Any contribution or feedback is most welcome!
 
 Test cases are added to kernel/skbuff.c. To run the tests you will need to build googletest from source, build KTF and build this suite also.
 
@@ -62,7 +62,6 @@ We need kernel-uek-devel and cpp packages to build. Finally once we have built k
 
 Now the ktf and skbtest modules have been added, we just need to "ktfrun".
 
-``bcccjfcdtrk`
 # sudo LD_LIBRARY_PATH=/usr/local/lib64 /usr/local/bin/ktfrun
 [==========] Running 2 tests from 1 test case.
 [----------] Global test environment set-up.
