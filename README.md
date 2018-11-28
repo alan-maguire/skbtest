@@ -7,6 +7,8 @@ Any contribution or feedback is most welcome!
 
 Test cases are added to kernel/skbuff.c. To run the tests you will need to build googletest from source, build KTF and build this suite also.
 
+Note that these instructions are centered on Oracle Linux but should work for other distros too, possibly with modified package names.
+
 ## Building googletest
 
 ```
