@@ -42,11 +42,11 @@ We need kernel-uek-devel and cpp packages to build. Finally once we have built k
 # make
 # sudo make install
 # sudo insmod kernel/ktf.ko
+```
 
 ## Building skbtest
 
 ```
-
 # cd ~/src
 # git clone <path to this git tree>
 # cd skbtest
@@ -64,6 +64,7 @@ We need kernel-uek-devel and cpp packages to build. Finally once we have built k
 
 Now the ktf and skbtest modules have been added, we just need to "ktfrun".
 
+```
 # sudo LD_LIBRARY_PATH=/usr/local/lib64 /usr/local/bin/ktfrun
 [==========] Running 2 tests from 1 test case.
 [----------] Global test environment set-up.
