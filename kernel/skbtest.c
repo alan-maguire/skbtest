@@ -97,7 +97,8 @@ KTF_RETURN_PROBE(__kmalloc_node_track_caller, kmalloc_nodehandler)
  * alloc_skb_nomem()
  *
  * Ensure that in the face of allocation failures (kmem cache alloc of the
- * skb) alloc_skb() behaves sensibly and returns NULL.
+ * skb and kmalloc of the linear data), alloc_skb() behaves sensibly and
+ * returns NULL.
  **/
 TEST(skb, alloc_skb_nomem)
 {
@@ -122,6 +123,8 @@ TEST(skb, alloc_skb_nomem)
 done:
 	KTF_UNREGISTER_RETURN_PROBE(kmem_cache_alloc_node,
 				    kmem_cache_alloc_nodehandler);
+	KTF_UNREGISTER_RETURN_PROBE(__kmalloc_node_track_caller,
+				    kmalloc_nodehandler);
 	kfree_skb(skb);
 }
 
