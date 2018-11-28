@@ -77,6 +77,22 @@ KTF_RETURN_PROBE(kmem_cache_alloc_node, kmem_cache_alloc_nodehandler)
 	return 0;
 }
 
+KTF_RETURN_PROBE(__kmalloc_node_track_caller, kmalloc_nodehandler)
+{
+	void *retval = (void *)KTF_RETURN_VALUE();
+
+	/* We only want alloc failures for this task! */
+	if (alloc_skb_nomem_task != current)
+		return 0;
+
+	if (retval)
+		kfree(retval);
+
+	KTF_SET_RETURN_VALUE(0);
+
+	return 0;
+}
+
 /**
  * alloc_skb_nomem()
  *
@@ -91,6 +107,13 @@ TEST(skb, alloc_skb_nomem)
 
 	ASSERT_INT_EQ_GOTO(KTF_REGISTER_RETURN_PROBE(kmem_cache_alloc_node,
 			   kmem_cache_alloc_nodehandler), 0, done);
+
+	skb = alloc_skb(128, GFP_KERNEL);
+	ASSERT_ADDR_EQ_GOTO(skb, 0, done);
+
+	ASSERT_INT_EQ_GOTO(KTF_REGISTER_RETURN_PROBE(
+			   __kmalloc_node_track_caller, kmalloc_nodehandler),
+			   0, done);
 
 	skb = alloc_skb(128, GFP_KERNEL);
 	ASSERT_ADDR_EQ_GOTO(skb, 0, done);
